@@ -19,7 +19,7 @@ file_path_log = current_dir/'../log', 'utils.log'
 logger = setup_logging('utils', file_path_log)
 
 
-def greetings(date_time=None):
+def greetings(date_time: str = None) -> str:
     """Функция, которая приветствует пользователя в зависимости от текущего времени суток """
     try:
         logger.info("Определяем было ли передано значение времени")
