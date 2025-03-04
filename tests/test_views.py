@@ -1,4 +1,4 @@
-from src.views import website
+from ..src.views import website
 from datetime import datetime
 
 
