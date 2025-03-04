@@ -30,7 +30,7 @@ def website(data_time: datetime) -> Union[list, dict]:
     Стоимость акций из S&P500.
     """
     print(f"Входные данные: {data_time}")
-    result1 = greetings()
+    result1 = greetings(data_time)
     result2 = user_transactions(data_time)
     result3 = max_five_transactions(data_time)
     result4 = exchange_rate()
@@ -41,11 +41,11 @@ def website(data_time: datetime) -> Union[list, dict]:
 
 if __name__ == '__main__':
 
-    print(f'{greetings()}')
-    data_time = pd.Timestamp("31-12-2021 00:00:00")
-    result = user_transactions(data_time)
+    print(greetings())
+    data_time = str("31-12-2021 00:00:00")
+    result = user_transactions(pd.Timestamp(data_time))
     print("Результат транзакций:")
     print(result)
-    print(f"Пять максимальных транзакций: {max_five_transactions(data_time)}")
+    print(f"Пять максимальных транзакций: {max_five_transactions(pd.Timestamp(data_time))}")
     print(f"Курс валют: {exchange_rate()}")
     print(f"Стоимость акций из SP500: {get_price_sp500()}")
