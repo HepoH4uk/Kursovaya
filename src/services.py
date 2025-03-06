@@ -27,28 +27,34 @@ def simple_search(search_str: str, transactions: List[Dict[str, Any]]) -> List[D
 
     df = pd.read_excel(transactions) if isinstance(transactions, pd.DataFrame) else transactions
     logger.info("Поиск значений по заданной строке")
-    for item in df:
+    result = pd.DataFrame()
+    try:
+        for column in df.columns:
+            filtered = df[df[column].astype(str).str.contains(search_str, case=False, na=False)]
+            result = pd.concat([result, filtered])
+        return result
+    except AttributeError:
+        for item in transactions:
+            if search_str in str(item['id']):
+                new_list_transactions.append(item)
+            elif search_str in item['state']:
+                new_list_transactions.append(item)
+            elif search_str in item['date']:
+                new_list_transactions.append(item)
+            elif search_str in item['operationAmount']['amount']:
+                new_list_transactions.append(item)
+            elif search_str in item['operationAmount']['currency']['name']:
+                new_list_transactions.append(item)
+            elif search_str in item['operationAmount']['currency']['code']:
+                new_list_transactions.append(item)
+            elif search_str in item['description']:
+                new_list_transactions.append(item)
+            elif search_str in item['from']:
+                new_list_transactions.append(item)
+            elif search_str in item['to']:
+                new_list_transactions.append(item)
+        return new_list_transactions
 
-        if search_str in str(item['id']):
-            new_list_transactions.append(item)
-        elif search_str in item['state']:
-            new_list_transactions.append(item)
-        elif search_str in item['date']:
-            new_list_transactions.append(item)
-        elif search_str in item['operationAmount']['amount']:
-            new_list_transactions.append(item)
-        elif search_str in item['operationAmount']['currency']['name']:
-            new_list_transactions.append(item)
-        elif search_str in item['operationAmount']['currency']['code']:
-            new_list_transactions.append(item)
-        elif search_str in item['description']:
-            new_list_transactions.append(item)
-        elif search_str in item['from']:
-            new_list_transactions.append(item)
-        elif search_str in item['to']:
-            new_list_transactions.append(item)
-
-    result = new_list_transactions
     # result = json.dumps(new_list_transactions)
     logger.info("Вывод отфильтрованных по заданной пользователем строке транзакций")
     return result
