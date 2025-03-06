@@ -25,7 +25,7 @@ def simple_search(search_str: str, transactions: List[Dict[str, Any]]) -> List[D
     if search_str == "" or search_str is None or not transactions:
         return []
 
-    df = pd.read_excel(transactions) if isinstance(transactions, pd.DataFrame) else transactions
+    df = pd.read_excel(transactions)
     logger.info("Поиск значений по заданной строке")
     result = pd.DataFrame()
     try:
@@ -57,7 +57,7 @@ def simple_search(search_str: str, transactions: List[Dict[str, Any]]) -> List[D
 
     # result = json.dumps(new_list_transactions)
     logger.info("Вывод отфильтрованных по заданной пользователем строке транзакций")
-    return result
+
 
 
 if __name__ == '__main__':
