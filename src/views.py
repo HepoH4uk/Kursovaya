@@ -4,14 +4,15 @@ import pandas as pd
 import datetime
 from pathlib import Path
 from dotenv import load_dotenv
+import json
 
 
 load_dotenv('../.env')
 
-current_dir = Path(__file__).parent.parent.resolve()
+dir_transactions_excel = Path(__file__).parent.parent.resolve()
 
-dir_transactions_excel = current_dir/'data'/'operations.xlsx'
-print(dir_transactions_excel)
+file_excel = dir_transactions_excel/'data'/'operations.xlsx'
+print(file_excel)
 
 
 def website(data_time: datetime) -> Union[list, dict]:
@@ -31,10 +32,10 @@ def website(data_time: datetime) -> Union[list, dict]:
     """
     print(f"Входные данные: {data_time}")
     result1 = greetings(data_time)
-    result2 = user_transactions(data_time)
-    result3 = max_five_transactions(data_time)
-    result4 = exchange_rate()
-    result5 = get_price_sp500()
+    result2 = user_transactions(data_time).to_json(orient='records', force_ascii=False)
+    result3 = max_five_transactions(data_time).to_json(orient='records', force_ascii=False)
+    result4 = json.dumps(exchange_rate())
+    result5 = json.dumps(get_price_sp500())
 
     return result1, result2, result3, result4, result5
 

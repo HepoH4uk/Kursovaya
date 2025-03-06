@@ -1,4 +1,3 @@
-import json
 import pandas as pd
 import datetime
 import os
@@ -62,8 +61,8 @@ def user_transactions(data_time: pd.Timestamp) -> pd.DataFrame:
     df_filtered.loc[:, 'кэшбек'] = df_filtered['Сумма операции с округлением'] // 100
     sales_by_card = df_filtered.groupby('Номер карты')[['Сумма операции с округлением', 'кэшбек']].sum().reset_index()
     sorted_sales = sales_by_card.sort_values(by='Сумма операции с округлением', ascending=False)
-    result = sorted_sales.to_json(orient='records', force_ascii=False)
-    return result
+
+    return sorted_sales
 
 
 def max_five_transactions(data_time: pd.Timestamp) -> pd.DataFrame:
@@ -81,9 +80,8 @@ def max_five_transactions(data_time: pd.Timestamp) -> pd.DataFrame:
     ]
     logger.info("Определяем 5 лучших транзакций по сумме платежа")
     top_five_transactions = filtered_df.sort_values(by='Сумма операции с округлением', ascending=False).head(5)
-    result = top_five_transactions.to_json(orient='records', force_ascii=False)
 
-    return result
+    return top_five_transactions
 
 
 def exchange_rate() -> list:
@@ -109,9 +107,9 @@ def exchange_rate() -> list:
             else:
                 logger.info("Ошибка: ключ 'result' не найден")
                 print("Ошибка: ключ 'result' не найден в ответе для:", currency)
-        result = json.dumps(new_currency_list)
+        # result = json.dumps(new_currency_list)
 
-        return result
+        return new_currency_list
 
     except Exception:
         logger.info(f"Произошла ошибка: {Exception}")
@@ -132,8 +130,8 @@ def get_price_sp500() -> list:
             dict_result = response.json()
             price_element = dict_result.get('price')
             currencies_price.append(f"{currency}:{price_element}")
-        result = json.dumps(currencies_price)
-        return result
+        # result = json.dumps(currencies_price)
+        return currencies_price
     except Exception:
         logger.info(f"Произошла ошибка: {Exception}")
         print(f"Произошла ошибка: {Exception}")
