@@ -15,7 +15,7 @@ file_excel = dir_transactions_excel/'data'/'operations.xlsx'
 print(file_excel)
 
 
-def website(data_time: datetime) -> Union[list, dict]:
+def website(data_time: str) -> Union[list, dict]:
 
     """
     Главная функция, принимающую на вход строку с датой и временем в формате
@@ -43,7 +43,7 @@ def website(data_time: datetime) -> Union[list, dict]:
 if __name__ == '__main__':
 
     print(greetings())
-    data_time = str("31-12-2021 00:00:00")
+    data_time = "31-12-2021 00:00:00"
     result = user_transactions(pd.Timestamp(data_time))
     print("Результат транзакций:")
     print(result)
