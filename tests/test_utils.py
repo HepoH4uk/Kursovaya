@@ -14,6 +14,10 @@ data = {
 df = pd.DataFrame(data)
 
 
+def mock_read_excel(file):
+    return df
+
+
 def test_greetings():
     hour = pd.Timestamp.now().hour
     greeting = greetings()
@@ -28,14 +32,16 @@ def test_greetings():
         assert greeting == "Добрый вечер"
 
 
-@mock.patch('pandas.read_excel', return_value=df)
-def test_user_transactions(mock_read_excel):
-    result = user_transactions(pd.to_datetime('29-09-2018', dayfirst=True))
+def test_user_transactions(monkeypatch):
+    monkeypatch.setattr(pd, "read_excel", mock_read_excel)
+    test_date = pd.to_datetime('29-09-2018', dayfirst=True)
+    result = user_transactions(test_date)
 
     expected = pd.DataFrame({
+        'Номер карты': ['*7197'],
         'Сумма операции с округлением': [186388.77],
         'кэшбек': [1863.0]
-    }, index=pd.Index(['*7197'], name='Номер карты'))
+    })
 
     pd.testing.assert_frame_equal(result, expected)
 
@@ -73,15 +79,15 @@ def test_exchange_rate(mock_requests_get):
     mock_requests_get.side_effect = [
         mock.Mock(json=lambda: {
             "success": True,
-            "result": 23.2345
+            "result": 23.23
         }),
         mock.Mock(json=lambda: {
             "success": True,
-            "result": 31.2345
+            "result": 31.23
         })
     ]
     result = exchange_rate()
-    expected = [23.2345, 31.2345]
+    expected = [23.23, 31.23]
 
     assert result == expected
 
