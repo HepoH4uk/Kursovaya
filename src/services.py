@@ -25,15 +25,7 @@ def simple_search(search_str: str, transactions: List[Dict[str, Any]]) -> List[D
     if search_str == "" or search_str is None or not transactions:
         return []
 
-    df = pd.read_excel(transactions)
-    logger.info("Поиск значений по заданной строке")
-    result = pd.DataFrame()
-    try:
-        for column in df.columns:
-            filtered = df[df[column].astype(str).str.contains(search_str, case=False, na=False)]
-            result = pd.concat([result, filtered])
-        return result
-    except AttributeError:
+    if type(transactions) == list:
         for item in transactions:
             if search_str in str(item['id']):
                 new_list_transactions.append(item)
@@ -53,10 +45,21 @@ def simple_search(search_str: str, transactions: List[Dict[str, Any]]) -> List[D
                 new_list_transactions.append(item)
             elif search_str in item['to']:
                 new_list_transactions.append(item)
+        logger.info("Вывод отфильтрованных по заданной пользователем строке транзакций")
         return new_list_transactions
+    else:
+        df = pd.read_excel(transactions)
+        logger.info("Поиск значений по заданной строке")
+        result = pd.DataFrame()
+        for column in df.columns:
+            filtered = df[df[column].astype(str).str.contains(search_str, case=False, na=False)]
+            result = pd.concat([result, filtered])
+        logger.info("Вывод отфильтрованных по заданной пользователем строке транзакций")
+        return result
+
 
     # result = json.dumps(new_list_transactions)
-    logger.info("Вывод отфильтрованных по заданной пользователем строке транзакций")
+
 
 
 
