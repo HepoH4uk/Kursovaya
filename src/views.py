@@ -1,7 +1,6 @@
 from src.utils import (greetings, exchange_rate, get_price_sp500, max_five_transactions, user_transactions)
 from typing import Union
 import pandas as pd
-import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 import json
@@ -31,13 +30,14 @@ def website(data_time: str) -> Union[list, dict]:
     Стоимость акций из S&P500.
     """
     print(f"Входные данные: {data_time}")
-    result1 = greetings(data_time)
-    result2 = user_transactions(data_time).to_json(orient='records', force_ascii=False)
-    result3 = max_five_transactions(data_time).to_json(orient='records', force_ascii=False)
-    result4 = json.dumps(exchange_rate())
-    result5 = json.dumps(get_price_sp500())
-
-    return result1, result2, result3, result4, result5
+    result = {
+        "greeting": greetings(data_time),
+        "cards": user_transactions(data_time).to_json(orient='records', force_ascii=False),
+        "top_transtactions": max_five_transactions(data_time).to_json(orient='records', force_ascii=False),
+        "currency_rates": exchange_rate(),
+        "stock_prices": get_price_sp500()
+    }
+    return json.dumps(result, ensure_ascii=False, indent=4)
 
 
 if __name__ == '__main__':
