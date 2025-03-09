@@ -57,10 +57,7 @@ def simple_search(search_str: str, transactions: List[Dict[str, Any]]) -> List[D
         logger.info("Вывод отфильтрованных по заданной пользователем строке транзакций")
         return result
 
-
     # result = json.dumps(new_list_transactions)
-
-
 
 
 if __name__ == '__main__':
