@@ -1,20 +1,20 @@
 from src.utils import (greetings, exchange_rate, get_price_sp500, max_five_transactions, user_transactions)
 from typing import Union
 import pandas as pd
-import datetime
 from pathlib import Path
 from dotenv import load_dotenv
+import json
 
 
 load_dotenv('../.env')
 
-current_dir = Path(__file__).parent.parent.resolve()
+dir_transactions_excel = Path(__file__).parent.parent.resolve()
 
-dir_transactions_excel = current_dir/'data'/'operations.xlsx'
-print(dir_transactions_excel)
+file_excel = dir_transactions_excel/'data'/'operations.xlsx'
+print(file_excel)
 
 
-def website(data_time: datetime) -> Union[list, dict]:
+def website(data_time: str) -> Union[list, dict]:
 
     """
     Главная функция, принимающую на вход строку с датой и временем в формате
@@ -30,22 +30,23 @@ def website(data_time: datetime) -> Union[list, dict]:
     Стоимость акций из S&P500.
     """
     print(f"Входные данные: {data_time}")
-    result1 = greetings()
-    result2 = user_transactions(data_time)
-    result3 = max_five_transactions(data_time)
-    result4 = exchange_rate()
-    result5 = get_price_sp500()
-
-    return result1, result2, result3, result4, result5
+    result = {
+        "greeting": greetings(data_time),
+        "cards": user_transactions(data_time).to_json(orient='records', force_ascii=False),
+        "top_transtactions": max_five_transactions(data_time).to_json(orient='records', force_ascii=False),
+        "currency_rates": exchange_rate(),
+        "stock_prices": get_price_sp500()
+    }
+    return json.dumps(result, ensure_ascii=False, indent=4)
 
 
 if __name__ == '__main__':
 
-    print(f'{greetings()}')
-    data_time = pd.Timestamp("31-12-2021 00:00:00")
-    result = user_transactions(data_time)
+    print(greetings())
+    data_time = "31-12-2021 00:00:00"
+    result = user_transactions(pd.Timestamp(data_time))
     print("Результат транзакций:")
     print(result)
-    print(f"Пять максимальных транзакций: {max_five_transactions(data_time)}")
+    print(f"Пять максимальных транзакций: {max_five_transactions(pd.Timestamp(data_time))}")
     print(f"Курс валют: {exchange_rate()}")
     print(f"Стоимость акций из SP500: {get_price_sp500()}")

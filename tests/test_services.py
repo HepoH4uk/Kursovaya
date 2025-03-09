@@ -24,7 +24,7 @@ def coll():
 def test_simple_search(coll):
     '''Тестирование правильности работы функции'''
     expected_result = coll  # Ожидаемый список транзакций
-    assert simple_search(search_str="USD", transactions=coll) == expected_result
+    assert simple_search(search_str="RUB", transactions=coll) == expected_result
 
 
 def test_simple_search_not_search_str(coll):
@@ -36,7 +36,7 @@ def test_simple_search_not_search_str(coll):
 def test_simple_search_not_transactions(coll):
     '''Тестирование правильности работы функции при отсутствии transactions'''
 
-    assert simple_search(search_str="USD", transactions="") == []
+    assert simple_search(search_str="RUB", transactions="") == []
 
 
 def test_simple_search_error_search_str(coll):
@@ -58,3 +58,7 @@ def test_simple_search_type_error():
     transactions = [{'description': 'покупка'}, {'description': 'оплата'}]
     with pytest.raises(TypeError, match="Неверный тип данных"):
         simple_search(search_str=123, transactions=transactions)
+
+
+if __name__ == "__main__":
+    pytest.main()
